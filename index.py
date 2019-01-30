@@ -57,6 +57,15 @@ class KinoIntentHandler(AbstractRequestHandler):
         # type: (HandlerInput) -> Response
         speech_text = "Ok, ich suche Kinos für dich"
 
+        attr = handler_input.attributes_manager.session_attributes
+
+        attr["Test"] = "Hallo Welt!"
+
+        handler_input.attributes_manager.session_attributes = attr
+
+        #Get Slot 'uhrzeit'
+        slot = handler_input.request_envelope.request.intent.slots['uhrzeit'].value
+
         handler_input.response_builder.speak(speech_text).set_card(
             SimpleCard("Kino", speech_text)).set_should_end_session(
             True)
@@ -87,6 +96,10 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
+        speech_text = "Viel Spaß im Kino!"
+
+        handler_input.response_builder.speak(speech_text).set_card(
+            SimpleCard("Kino", speech_text))
         return handler_input.response_builder.response
 
 
