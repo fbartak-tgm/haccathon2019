@@ -3,10 +3,13 @@ import datetime
 today = datetime.datetime.now()
 import random
 import json
+
 filme = json.loads(json.dumps(rq.get("https://efs.film.at/api/v1/cfs/filmat/screenings/nested/movie/" + today.strftime("%Y-%m-%d") + "?city=Wien").json()["result"]).lower().replace("&","und"))
 genres = ['Fantasy', 'Romanze', 'Kurzfilm', 'Science Fiction', 'Biografie', 'Erotik', 'Sport',
      'Krimi', 'Tragikomödie', 'Animation', 'Geschichtsfilm', 'Drama', 'Kinderfilm', 'Western', 'Kultfilme', 'Action',
      'Dokumentation', 'Literaturverfilmung', 'Abenteuer', 'Horror', 'Komödie', 'Thriller']
+
+time = datetime.datetime.strptime("15:30", "%H:%M").replace(year=today.year, day=today.day, month=today.month)
 
 def get_film_by_genre(genre):
     results = []
@@ -31,16 +34,16 @@ def get_film_at_time(time=None):
                 for screening in k["screenings"]:
                         if time == None or time.timestamp() - parsetime(screening["time"]).timestamp() < 0:
                             if mvrating == None or mvrating > 3:
-                                screenlist.append(parsetime(screening["time"]).strftime("%H:%M Uhr"))
+                                screenlist.append(parsetime(screening["time"]).strftime("%H Uhr %M"))
                             break
                 if len(screenlist) > 0:
                     filmlistspielzeiten.append((k["parent"]["title"],screenlist))
-
         if len(filmlistspielzeiten) > 0:
             filmlist[film["parent"]["title"]] = filmlistspielzeiten
         else:
             pass
     return filmlist
+
 def get_one_film(filmliste):
     for x in filmliste:
         for kino in filmliste[x]:
@@ -77,9 +80,9 @@ def weather_clear():
     w = rq.get("https://api.openweathermap.org/data/2.5/weather?q=vienna&APPID=fd9fa1baba434b74b359c8112aef30bf").json()
     return w["weather"][0]["main"] == "Clear"
 
-# time = datetime.datetime.strptime("15:30", "%H:%M").replace(year=today.year, day=today.day, month=today.month)
-# print(get_one_film(get_film_at_time("09:29")))
-# print(random_movie(get_film_at_time("09:29")))
-# print(search_movie_by_genre("horror","12:00"))
-# print(random_genres())
-# print(weather_clear())
+
+print(get_one_film(get_film_at_time("09:29")))
+print(random_movie(get_film_at_time("09:29")))
+print(search_movie_by_genre("horror","12:00"))
+print(random_genres())
+print(weather_clear())
