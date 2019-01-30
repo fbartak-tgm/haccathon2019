@@ -1,9 +1,10 @@
 import requests as rq
-from pprint import pprint
 import datetime
 today = datetime.datetime.now()
 import random
-filme = rq.get("https://efs.film.at/api/v1/cfs/filmat/screenings/nested/movie/" + today.strftime("%Y-%m-%d") + "?city=Wien").json()["result"]
+import json
+filme = json.loads(json.dumps(rq.get("https://efs.film.at/api/v1/cfs/filmat/screenings/nested/movie/" + today.strftime("%Y-%m-%d") + "?city=Wien").json()["result"]).lower())
+
 
 
 def get_film_by_genre(genre):
@@ -14,19 +15,22 @@ def get_film_by_genre(genre):
                 results.append(film["parent"]["title"])
     return results
 
-def get_film_at_time(time=None):
+def get_film_at_time(time=None,minscore=30):
     filmlist = {}
     if not time == None:
         time = datetime.datetime.strptime(time, "%H:%M").replace(year=today.year, day=today.day, month=today.month)
     for film in filme:
         filmlistspielzeiten = []
-        if type(film["nestedResults"]) is list:
-            for k in film["nestedResults"]:
+
+
+        if type(film["nestedresults"]) is list:
+            for k in film["nestedresults"]:
+                mvrating = check_rating(k["parent"]["title"])
                 screenlist = []
                 for screening in k["screenings"]:
-
                         if time == None or time.timestamp() - parsetime(screening["time"]).timestamp() < 0:
-                            screenlist.append(parsetime(screening["time"]))
+                            if mvrating == None or mvrating > 3:
+                                screenlist.append(parsetime(screening["time"]))
                             break
                 if len(screenlist) > 0:
                     filmlistspielzeiten.append((k["parent"]["title"],screenlist))
@@ -39,7 +43,6 @@ def get_film_at_time(time=None):
 def get_one_film(filmliste):
     for x in filmliste:
         for kino in filmliste[x]:
-
             return x,kino[0],kino[1][0]
 
 def parsetime(apitime):
@@ -60,10 +63,14 @@ def search_movie_by_genre(query):
     for x in movies_in_genre:
         if x in filme:
             filmelemente.append((x,filme[x][0][0],filme[x][0][1][0]))
-    pprint(filmelemente[0])
     return filmelemente
 
-#time = datetime.datetime.strptime("15:30", "%H:%M").replace(year=today.year, day=today.day, month=today.month)
-print(get_one_film(get_film_at_time("09:29")))
-print(random_movie(get_film_at_time("09:29")))
-print(search_movie_by_genre("Horror"))
+def check_rating(title):
+    mv = rq.get("https://www.omdbapi.com/?apikey=dc083806&t=" + title).json()
+    if "Error" in mv:
+        return None
+    return float(mv["Ratings"][0]["Value"].split("/")[0])
+#time = datetime.datetime.strptime("15:30", "%:%M").replace(year=today.year, day=today.day, month=today.month)
+# print(get_one_film(get_film_at_time("09:29")))
+# print(random_movie(get_film_at_time("09:29")))
+print(search_movie_by_genre("horror"))
