@@ -81,8 +81,8 @@ def weather_clear():
     return w["weather"][0]["main"] == "Clear"
 
 
-print(get_one_film(get_film_at_time("09:29")))
-print(random_movie(get_film_at_time("09:29")))
-print(search_movie_by_genre("horror","12:00"))
-print(random_genres())
-print(weather_clear())
+# print(get_one_film(get_film_at_time("09:29")))
+# print(random_movie(get_film_at_time("09:29")))
+# print(search_movie_by_genre("horror","12:00"))
+# print(random_genres())
+# print(weather_clear())
