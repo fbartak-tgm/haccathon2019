@@ -3,8 +3,8 @@ import datetime
 today = datetime.datetime.now()
 import random
 import json
-filme = json.loads(json.dumps(rq.get("https://efs.film.at/api/v1/cfs/filmat/screenings/nested/movie/" + today.strftime("%Y-%m-%d") + "?city=Wien").json()["result"]).lower().replace("&","and"))
-genres = ['Fantasy', 'Romanze', 'Kurzfilm', 'Musikfilm / Musical', 'Science Fiction', 'Biografie', 'Erotik', 'Sport',
+filme = json.loads(json.dumps(rq.get("https://efs.film.at/api/v1/cfs/filmat/screenings/nested/movie/" + today.strftime("%Y-%m-%d") + "?city=Wien").json()["result"]).lower().replace("&","und"))
+genres = ['Fantasy', 'Romanze', 'Kurzfilm', 'Science Fiction', 'Biografie', 'Erotik', 'Sport',
      'Krimi', 'Tragikomödie', 'Animation', 'Geschichtsfilm', 'Drama', 'Kinderfilm', 'Western', 'Kultfilme', 'Action',
      'Dokumentation', 'Literaturverfilmung', 'Abenteuer', 'Horror', 'Komödie', 'Thriller']
 
@@ -77,9 +77,9 @@ def weather_clear():
     w = rq.get("https://api.openweathermap.org/data/2.5/weather?q=vienna&APPID=fd9fa1baba434b74b359c8112aef30bf").json()
     return w["weather"][0]["main"] == "Clear"
 
-time = datetime.datetime.strptime("15:30", "%H:%M").replace(year=today.year, day=today.day, month=today.month)
-print(get_one_film(get_film_at_time("09:29")))
-print(random_movie(get_film_at_time("09:29")))
-print(search_movie_by_genre("horror","12:00"))
-print(random_genres())
-print(weather_clear())
+# time = datetime.datetime.strptime("15:30", "%H:%M").replace(year=today.year, day=today.day, month=today.month)
+# print(get_one_film(get_film_at_time("09:29")))
+# print(random_movie(get_film_at_time("09:29")))
+# print(search_movie_by_genre("horror","12:00"))
+# print(random_genres())
+# print(weather_clear())
