@@ -24,11 +24,13 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speech_text = "Willkommen zum Python Hello World. Du kannst Hallo sagen."
+        speech_text = "Hey, hast du vielleicht Bock auf einen Kinofilm?"
 
         handler_input.response_builder.speak(speech_text).set_card(
             SimpleCard("Hello World", speech_text)).set_should_end_session(
             False)
+        bla = handler_input.attributes_manager.session_attributes
+        bla
         return handler_input.response_builder.response
 
 
@@ -46,6 +48,7 @@ class HelloWorldIntentHandler(AbstractRequestHandler):
             SimpleCard("Hello World", speech_text)).set_should_end_session(
             True)
         return handler_input.response_builder.response
+
 
 class KinoIntentHandler(AbstractRequestHandler):
     """Handler für Kino Intent."""
@@ -71,6 +74,71 @@ class KinoIntentHandler(AbstractRequestHandler):
             True)
         return handler_input.response_builder.response
 
+
+class StartIntentHandler(AbstractRequestHandler):
+    """Handler für Start Intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return is_intent_name("Start")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        speech_text = "Wann hättest du denn Zeit?"
+
+        handler_input.response_builder.speak(speech_text).set_card(
+            SimpleCard("Hello World", speech_text)).set_should_end_session(
+            True)
+        return handler_input.response_builder.response
+
+
+class TimeHandler(AbstractRequestHandler):
+    """Handler für Hello World Intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return is_intent_name("Time")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        speech_text = "Hmm, lass mich nachschauen. Ich hätte da Fimle von den Genres ..."
+
+        handler_input.response_builder.speak(speech_text).set_card(
+            SimpleCard("Hello World", speech_text)).set_should_end_session(
+            True)
+        return handler_input.response_builder.response
+
+
+class GenreHandler(AbstractRequestHandler):
+    """Handler für Hello World Intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return is_intent_name("Genre")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        speech_text = "Toll, du hast ein Genre gefunden!"
+
+        handler_input.response_builder.speak(speech_text).set_card(
+            SimpleCard("Hello World", speech_text)).set_should_end_session(
+            True)
+        return handler_input.response_builder.response
+
+
+class AnderesGenreHandler(AbstractRequestHandler):
+    """Handler für Hello World Intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return is_intent_name("Genre")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        speech_text = "Neuer Genrevorschlag"
+
+        handler_input.response_builder.speak(speech_text).set_card(
+            SimpleCard("Hello World", speech_text)).set_should_end_session(
+            True)
+        return handler_input.response_builder.response
+
+
 class CancelOrStopIntentHandler(AbstractRequestHandler):
     """Handler für Cancel and Stop Intent."""
     def can_handle(self, handler_input):
@@ -80,12 +148,11 @@ class CancelOrStopIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speech_text = "Tschüss!"
+        speech_text = "Kein Kino heute? Schade! Vielleicht ein andermal, do weißt ja, wie du mich findest."
 
         handler_input.response_builder.speak(speech_text).set_card(
             SimpleCard("Hello World", speech_text))
         return handler_input.response_builder.response
-
 
 
 class SessionEndedRequestHandler(AbstractRequestHandler):
@@ -113,8 +180,10 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
         # type: (HandlerInput, Exception) -> Response
         logger.error(exception, exc_info=True)
 
-        speech = "Tut mir Leid, es funktioniert etwas nicht!"
-        handler_input.response_builder.speak(speech).ask(speech)
+        speech = "Ich hab dich nicht verstanden."
+        handler_input.response_builder.speak(speech).set_card(
+            SimpleCard("Hello World", speech)).set_should_end_session(
+            True)
 
         return handler_input.response_builder.response
 
