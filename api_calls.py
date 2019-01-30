@@ -34,7 +34,7 @@ def get_film_at_time(time=None):
                 for screening in k["screenings"]:
                         if time == None or time.timestamp() - parsetime(screening["time"]).timestamp() < 0:
                             if mvrating == None:
-                                screenlist.append(parsetime(screening["time"]).strftime("%H Uhr %M").replace(" Uhr 00"," Uhr"))
+                                screenlist.append(parsetime(screening["time"]).strftime("%H Uhr %M").replace(" Uhr 00"," Uhr "))
                             break
                 if len(screenlist) > 0:
                     filmlistspielzeiten.append((k["parent"]["title"],screenlist))
