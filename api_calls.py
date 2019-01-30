@@ -80,4 +80,4 @@ def weather_clear():
 # print(random_movie(get_film_at_time("09:29")))
 # print(search_movie_by_genre("horror","12:00"))
 # print(random_genres())
-print(weather_clear())
+#print(weather_clear())
