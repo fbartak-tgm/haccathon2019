@@ -11,3 +11,9 @@ def get_film_by_genre(genre):
             if genre in film["parent"]["genres"]:
                 results.append(film["parent"]["title"])
     return results
+
+def get_film_at_time(time):
+    for film in filme:
+        pprint(film)
+
+get_film_at_time(None)
