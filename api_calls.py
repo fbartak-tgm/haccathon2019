@@ -24,7 +24,8 @@ def get_film_at_time(time=None,minscore=30):
 
         if type(film["nestedresults"]) is list:
             for k in film["nestedresults"]:
-                mvrating = check_rating(k["parent"]["title"])
+                mvrating = None
+                #mvrating = check_rating(k["parent"]["title"])
                 screenlist = []
                 for screening in k["screenings"]:
                         if time == None or time.timestamp() - parsetime(screening["time"]).timestamp() < 0:
@@ -54,10 +55,9 @@ def random_movie(filmliste):
     #print(x,kino)
     return x,kino[0],kino[1][0],check_rating(x)
 
-def search_movie_by_genre(query,time):
+def search_movie_by_genre(query,time=None):
     movies_in_genre = get_film_by_genre(query)
-    filme = get_film_at_time(time)
-
+    filme = get_film_at_time(time=time)
     filmelemente = []
     for x in movies_in_genre:
         if x in filme:
@@ -72,4 +72,4 @@ def check_rating(title):
 #time = datetime.datetime.strptime("15:30", "%:%M").replace(year=today.year, day=today.day, month=today.month)
 # print(get_one_film(get_film_at_time("09:29")))
 # print(random_movie(get_film_at_time("09:29")))
-print(search_movie_by_genre("horror"))
+print(search_movie_by_genre("horror","12:00"))
