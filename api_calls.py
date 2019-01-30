@@ -14,6 +14,13 @@ def get_film_by_genre(genre):
 
 def get_film_at_time(time):
     for film in filme:
-        pprint(film)
+        for kino in film:
+            if type(film[kino]) is list:
+                for k in film[kino]:
+                    for screening in k["screenings"]:
+                        print(screening,"\n\n\n")
 
-get_film_at_time(None)
+            else:
+                print(type(film[kino]))
+
+print(get_film_at_time(None))

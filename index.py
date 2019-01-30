@@ -27,26 +27,23 @@ class LaunchRequestHandler(AbstractRequestHandler):
         speech_text = "Willkommen zum Python Hello World. Du kannst Hallo sagen."
 
         handler_input.response_builder.speak(speech_text).set_card(
-            SimpleCard("Hello World", speech_text)).set_should_end_session(
+            SimpleCard(speech_text)).set_should_end_session(
             False)
         return handler_input.response_builder.response
 
 
-class HelloWorldIntentHandler(AbstractRequestHandler):
+class KinoIntentHandler(AbstractRequestHandler):
     """Handler für Hello World Intent."""
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return is_intent_name("HelloIntent")(handler_input)
+        return is_intent_name("KinoIntent")(handler_input)
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speech_text = "Hallo"
+        speech_text = str(handler_input.attributes_manager.request_attributes.items())
 
-        handler_input.response_builder.speak(speech_text).set_card(
-            SimpleCard("Hello World", speech_text)).set_should_end_session(
-            True)
+        handler_input.response_builder.speak(str(handler_input.attributes_manager.request_attributes.items())).set_should_end_session(True)
         return handler_input.response_builder.response
-
 
 class CancelOrStopIntentHandler(AbstractRequestHandler):
     """Handler für Cancel and Stop Intent."""
@@ -93,10 +90,10 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 
 
 sb.add_request_handler(LaunchRequestHandler())
-sb.add_request_handler(HelloWorldIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
 
 sb.add_exception_handler(CatchAllExceptionHandler())
+sb.add_request_handler(KinoIntentHandler())
 
 handler = sb.lambda_handler()
