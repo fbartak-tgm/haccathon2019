@@ -49,6 +49,29 @@ class HelloWorldIntentHandler(AbstractRequestHandler):
             Tru4e)
         return handler_input.response_builder.response
 
+class KinoIntentHandler(AbstractRequestHandler):
+    """Handler für Kino Intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return is_intent_name("KinoIntent")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        speech_text = "Ok, ich suche Kinos für dich"
+
+        attr = handler_input.attributes_manager.session_attributes
+
+        attr["Test"] = "Hallo Welt!"
+
+        handler_input.attributes_manager.session_attributes = attr
+
+        #Get Slot 'uhrzeit'
+        slot = handler_input.request_envelope.request.intent.slots['uhrzeit'].value
+
+        handler_input.response_builder.speak(speech_text).set_card(
+            SimpleCard("Kino", speech_text)).set_should_end_session(
+            True)
+        return handler_input.response_builder.response
 
 class CancelOrStopIntentHandler(AbstractRequestHandler):
     """Handler für Cancel and Stop Intent."""
@@ -75,6 +98,10 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
+        speech_text = "Viel Spaß im Kino!"
+
+        handler_input.response_builder.speak(speech_text).set_card(
+            SimpleCard("Kino", speech_text))
         return handler_input.response_builder.response
 
 
@@ -93,11 +120,11 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 
         return handler_input.response_builder.response
 
-
 sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(HelloWorldIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
+sb.add_request_handler(KinoIntentHandler())
 
 sb.add_exception_handler(CatchAllExceptionHandler())
 
