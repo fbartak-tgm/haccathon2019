@@ -9,7 +9,7 @@ genres = ['Fantasy', 'Romanze', 'Kurzfilm', 'Science Fiction', 'Biografie', 'Ero
      'Krimi', 'Tragikomödie', 'Animation', 'Geschichtsfilm', 'Drama', 'Kinderfilm', 'Western', 'Kultfilme', 'Action',
      'Dokumentation', 'Literaturverfilmung', 'Abenteuer', 'Horror', 'Komödie', 'Thriller']
 
-time = datetime.datetime.strptime("15:30", "%H:%M").replace(year=today.year, day=today.day, month=today.month)
+time = datetime.datetime.now().replace(year=today.year, day=today.day, month=today.month)
 
 def get_film_by_genre(genre):
     results = []
@@ -33,8 +33,8 @@ def get_film_at_time(time=None):
                 screenlist = []
                 for screening in k["screenings"]:
                         if time == None or time.timestamp() - parsetime(screening["time"]).timestamp() < 0:
-                            if mvrating == None or mvrating > 3:
-                                screenlist.append(parsetime(screening["time"]).strftime("%H Uhr %M"))
+                            if mvrating == None:
+                                screenlist.append(parsetime(screening["time"]).strftime("%H Uhr %M").replace(" Uhr 00"," Uhr"))
                             break
                 if len(screenlist) > 0:
                     filmlistspielzeiten.append((k["parent"]["title"],screenlist))
