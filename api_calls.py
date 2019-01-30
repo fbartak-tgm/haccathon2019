@@ -4,6 +4,9 @@ today = datetime.datetime.now()
 import random
 import json
 filme = json.loads(json.dumps(rq.get("https://efs.film.at/api/v1/cfs/filmat/screenings/nested/movie/" + today.strftime("%Y-%m-%d") + "?city=Wien").json()["result"]).lower())
+genres = ['Fantasy', 'Romanze', 'Kurzfilm', 'Musikfilm / Musical', 'Science Fiction', 'Biografie', 'Erotik', 'Sport',
+     'Krimi', 'Tragikomödie', 'Animation', 'Geschichtsfilm', 'Drama', 'Kinderfilm', 'Western', 'Kultfilme', 'Action',
+     'Dokumentation', 'Literaturverfilmung', 'Abenteuer', 'Horror', 'Komödie', 'Thriller']
 
 
 
@@ -30,7 +33,7 @@ def get_film_at_time(time=None,minscore=30):
                 for screening in k["screenings"]:
                         if time == None or time.timestamp() - parsetime(screening["time"]).timestamp() < 0:
                             if mvrating == None or mvrating > 3:
-                                screenlist.append(parsetime(screening["time"]))
+                                screenlist.append(parsetime(screening["time"]).strftime("%H:%M Uhr"))
                             break
                 if len(screenlist) > 0:
                     filmlistspielzeiten.append((k["parent"]["title"],screenlist))
@@ -65,11 +68,17 @@ def search_movie_by_genre(query,time=None):
     return filmelemente
 
 def check_rating(title):
+    pass
     mv = rq.get("https://www.omdbapi.com/?apikey=dc083806&t=" + title).json()
     if "Error" in mv:
         return None
     return float(mv["Ratings"][0]["Value"].split("/")[0])
+
+def random_genres():
+    g = [random.choice(genres),random.choice(genres),random.choice(genres)]
+    return g
 #time = datetime.datetime.strptime("15:30", "%:%M").replace(year=today.year, day=today.day, month=today.month)
 # print(get_one_film(get_film_at_time("09:29")))
 # print(random_movie(get_film_at_time("09:29")))
 print(search_movie_by_genre("horror","12:00"))
+print(random_genres())
