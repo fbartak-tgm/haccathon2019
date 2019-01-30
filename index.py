@@ -29,6 +29,8 @@ class LaunchRequestHandler(AbstractRequestHandler):
         handler_input.response_builder.speak(speech_text).set_card(
             SimpleCard("Hello World", speech_text)).set_should_end_session(
             False)
+        bla = handler_input.attributes_manager.session_attributes
+        bla
         return handler_input.response_builder.response
 
 
@@ -44,7 +46,7 @@ class HelloWorldIntentHandler(AbstractRequestHandler):
 
         handler_input.response_builder.speak(speech_text).set_card(
             SimpleCard("Hello World", speech_text)).set_should_end_session(
-            True)
+            Tru4e)
         return handler_input.response_builder.response
 
 
