@@ -8,8 +8,6 @@ genres = ['Fantasy', 'Romanze', 'Kurzfilm', 'Musikfilm / Musical', 'Science Fict
      'Krimi', 'Tragikomödie', 'Animation', 'Geschichtsfilm', 'Drama', 'Kinderfilm', 'Western', 'Kultfilme', 'Action',
      'Dokumentation', 'Literaturverfilmung', 'Abenteuer', 'Horror', 'Komödie', 'Thriller']
 
-
-
 def get_film_by_genre(genre):
     results = []
     for film in filme:
@@ -18,7 +16,7 @@ def get_film_by_genre(genre):
                 results.append(film["parent"]["title"])
     return results
 
-def get_film_at_time(time=None,minscore=30):
+def get_film_at_time(time=None):
     filmlist = {}
     if not time == None:
         time = datetime.datetime.strptime(time, "%H:%M").replace(year=today.year, day=today.day, month=today.month)
@@ -52,10 +50,8 @@ def parsetime(apitime):
     return datetime.datetime.strptime(apitime,"%Y-%m-%dT%H:%M:%S+01:00") - datetime.timedelta(hours=1)
 
 def random_movie(filmliste):
-
     x = random.choice(list(filmliste.keys()))
     kino = random.choice(list(filmliste[x]))
-    #print(x,kino)
     return x,kino[0],kino[1][0],check_rating(x)
 
 def search_movie_by_genre(query,time=None):
@@ -68,7 +64,6 @@ def search_movie_by_genre(query,time=None):
     return filmelemente
 
 def check_rating(title):
-    pass
     mv = rq.get("https://www.omdbapi.com/?apikey=dc083806&t=" + title).json()
     if "Error" in mv:
         return None
@@ -77,8 +72,12 @@ def check_rating(title):
 def random_genres():
     g = [random.choice(genres),random.choice(genres),random.choice(genres)]
     return g
+def weather_clear():
+    w = rq.get("https://api.openweathermap.org/data/2.5/weather?q=vienna&APPID=fd9fa1baba434b74b359c8112aef30bf").json()
+    return w["weather"][0]["main"] == "Clear"
 #time = datetime.datetime.strptime("15:30", "%:%M").replace(year=today.year, day=today.day, month=today.month)
 # print(get_one_film(get_film_at_time("09:29")))
 # print(random_movie(get_film_at_time("09:29")))
-print(search_movie_by_genre("horror","12:00"))
-print(random_genres())
+# print(search_movie_by_genre("horror","12:00"))
+# print(random_genres())
+print(weather_clear())
