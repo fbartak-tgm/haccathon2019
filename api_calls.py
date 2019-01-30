@@ -48,8 +48,9 @@ def parsetime(apitime):
 def random_movie(filmliste):
 
     x = random.choice(list(filmliste.keys()))
-    kino = random.choice(list(filmliste[x].keys()))
-    return x,kino,filmliste[x][kino]
+    kino = random.choice(list(filmliste[x]))
+    print(x,kino)
+    return x,kino[0],kino[1][0]
 
 def search_movie_by_genre(query):
     movies_in_genre = get_film_by_genre(query)
@@ -61,7 +62,8 @@ def search_movie_by_genre(query):
             filmelemente.append((x,filme[x][0][0],filme[x][0][1][0]))
     pprint(filmelemente[0])
     return filmelemente
+
 #time = datetime.datetime.strptime("15:30", "%H:%M").replace(year=today.year, day=today.day, month=today.month)
-#print(get_one_film(get_film_at_time("09:29")))
-#print(random_movie(get_film_at_time("09:29")))
+print(get_one_film(get_film_at_time("09:29")))
+print(random_movie(get_film_at_time("09:29")))
 print(search_movie_by_genre("Horror"))
